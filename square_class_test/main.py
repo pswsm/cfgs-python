@@ -3,9 +3,6 @@
 
 #made by pswsm
 
-import turtle
-
-
 def squareVertices(x: float = 0, y: float = 0, length: float = 100) -> list:
     '''Simulates a square nd returns the vertice coordinates.
     Returns the vertices in clockwise order, starting from the down-right.'''
