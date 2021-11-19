@@ -9,7 +9,7 @@ class Person:
        self.age = age
 
 
-ady: Person = Person(likes = ['lechuga', 'valorant'], name = 'Ady', age = 22)
+pau: Person = Person(likes = ['linux', 'gaming', 'pcmr'], name = 'Pau', age = 18)
 
-print(f'Me llamo {ady.name}, tengo {ady.age} y me gusta:', ' '.join(ady.likes), '.')
+print(f'My name is {pau.name}, I am {pau.age} years old and I like:' + ' '.join(pau.likes) + '.')
 
