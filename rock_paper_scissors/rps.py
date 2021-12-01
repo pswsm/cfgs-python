@@ -6,13 +6,15 @@
 from random import choice
 
 def rps(user_choice: str) -> bool:
+    """Main rock-paper-scissor function"""
     options: list[str] = ['rock', 'paper', 'scissors']
     cpu_option: str = choice(options)
 
     if (user_choice == cpu_option):
         print(f"It's a tie!")
         return True
-    elif ((user_choice.lower() == 'rock' and cpu_option == options[2]) or (user_choice.lower() == 'paper' and cpu_option == options[0])
+    elif ((user_choice.lower() == 'rock' and cpu_option == options[2])
+          or (user_choice.lower() == 'paper' and cpu_option == options[0])
           or (user_choice.lower() == 'scissors' and cpu_option == options[1])):
         print(f'You win!')
         return False
@@ -22,6 +24,7 @@ def rps(user_choice: str) -> bool:
 
 
 def valid_option(user_choice) -> bool:
+    """Checks if user input is a valid option"""
     v_options: list[str] = ['rock', 'paper', 'scissors']
 
     if user_choice in v_options:
@@ -37,5 +40,4 @@ while run == True:
         uc = input(f'Rock, Paper or Scissors?!?\t')
 
     run = rps(uc)
-
 
