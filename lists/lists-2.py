@@ -4,12 +4,10 @@
 #made by pswsm
 
 def sum_in_list(numbers: list[float]) -> float:
-    result:float = 0
-
+    result: float = 0
     for number in numbers:
         result = result + number
-
-    return result
+        return result
 
 numbers: list[float] = []
 
