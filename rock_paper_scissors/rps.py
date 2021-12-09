@@ -3,12 +3,14 @@
 
 #made by pswsm
 
-from random import choice
+import random as rand
+import os
+
 
 def rps(user_choice: str) -> bool:
     """Main rock-paper-scissor function"""
     options: list[str] = ['rock', 'paper', 'scissors']
-    cpu_option: str = choice(options)
+    cpu_option: str = rand.choice(options)
 
     if (user_choice == cpu_option):
         print(f"It's a tie!")
@@ -37,7 +39,10 @@ run: bool = True
 while run == True:
     uc: str = input(f'Rock, Paper or Scissors?!?\t')
     while not valid_option(uc):
+        os.system('clear')
+        print(f'Not a valid option.\nValid options are:\n\t- Rock\n\t- Paper\n\t- Scissors')
         uc = input(f'Rock, Paper or Scissors?!?\t')
-
+    
+    os.system('clear')
     run = rps(uc)
 
