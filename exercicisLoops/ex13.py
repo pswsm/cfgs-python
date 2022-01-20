@@ -3,14 +3,21 @@
 
 #made by pswsm
 
-number: int = 5
-times: int = 1
-result: int = 1
+def factorial(number: int) -> int:
+    '''
+    Just a factorial calculator.
+    Give an int, return the factorial
+    '''
+    times: int = 1
+    result: int = 1
 
-# Calculate Factorial
-while times <= number:
-    result = result * times
-    #  print(times)
-    times = times + 1
+    assert (number >= 0), "Can't factorize negative integers"
 
-print(result)
+    while times <= number:
+        result = result * times
+        times = times + 1
+
+    return result
+
+print(factorial(1))
+
