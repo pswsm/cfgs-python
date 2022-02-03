@@ -5,7 +5,7 @@
 
 from pathlib import Path
 
-path: str = '/home/pswsm/github/cfgs-python/dades_covid/2022-01-20-covid-dades-aga/2022-01-20-covid-dades-aga.csv'
+path: str = '/home/pswsm/github/cfgs-python/dades_covid/2022-01-20-covid-dades-aga/2022-01-20-covid-dades-head.csv'
 
 def row(file: str) -> list[str]:
     text: str = Path(file).read_text()
@@ -21,7 +21,7 @@ def column(row: list[str]) -> dict[str, list[str]]:
     sorted_rows: list[list[str]] = []
     for rows_num in range(len(rows)):
         listed_rows.append(rows[rows_num].split(';'))
-
+    print(listed_rows)
 
     for data in range(len(listed_rows)):
         for header in range(len(headers)):
