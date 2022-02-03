@@ -104,7 +104,7 @@ def pct_shots(dosi1: int, dosi2: int, total: int) -> tuple[float, float]:
 contents: str                   = read_csv("/home/pswsm/github/cfgs-python/dades_covid/2022-01-20-covid-dades-aga/2022-01-20-covid-dades-aga.csv")
 rows:     list[str]             = separate_by_rows(contents)
 table:    list[list[str]]       = separate_by_columns(rows)
-dosi1_list, dosi2_list          = get_covid_shots(table, "ALT CAMP")
+dosi1_list, dosi2_list          = get_covid_shots(table, "BARCELONA")
 dosi1_sum, dosi2_sum, total_sum = sum_shots(dosi1_list, dosi2_list)
 percent1_shot, percent2_shot    = pct_shots(dosi1_sum, dosi2_sum, total_sum)
 
