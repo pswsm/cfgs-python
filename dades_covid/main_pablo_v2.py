@@ -41,7 +41,7 @@ def separate_by_columns(rows: list[str]) -> list[list[str]]:
 
 # 4. Get Covid Shots
 # -----------------------------------------------------------------------------
-def get_covid_shots(table: list[list[str]]) -> tuple[list[int], list[int]]:
+def get_covid_shots(table: list[list[str]], zone: str = "") -> tuple[list[int], list[int]]:
    '''Input:  A table with Covid Data. Each datum is a string.
       Output: The data of two columns as ints: "dosi_1" and "dosi_2"'''
    
@@ -61,7 +61,7 @@ def get_covid_shots(table: list[list[str]]) -> tuple[list[int], list[int]]:
 
    for row_bcn in covid_data:
        bcn_cmc: str = row_bcn[comarca_field_index]
-       if "BARCELONA" in bcn_cmc:
+       if zone in bcn_cmc:
            bcn_list.append(row_bcn)
 
    for row in bcn_list:
@@ -104,7 +104,7 @@ def pct_shots(dosi1: int, dosi2: int, total: int) -> tuple[float, float]:
 contents: str                   = read_csv("/home/pswsm/github/cfgs-python/dades_covid/2022-01-20-covid-dades-aga/2022-01-20-covid-dades-aga.csv")
 rows:     list[str]             = separate_by_rows(contents)
 table:    list[list[str]]       = separate_by_columns(rows)
-dosi1_list, dosi2_list          = get_covid_shots(table)
+dosi1_list, dosi2_list          = get_covid_shots(table, "ALT CAMP")
 dosi1_sum, dosi2_sum, total_sum = sum_shots(dosi1_list, dosi2_list)
 percent1_shot, percent2_shot    = pct_shots(dosi1_sum, dosi2_sum, total_sum)
 
