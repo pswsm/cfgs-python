@@ -5,7 +5,7 @@
 
 from pathlib import Path
 
-path: str = '/home/pswsm/github/cfgs-python/dades_covid/2022-01-20-covid-dades-aga/2022-01-20-covid-dades-simple.csv'
+path: str = '/home/pswsm/github/cfgs-python/dades_covid/2022-01-20-covid-dades-aga/2022-01-20-covid-dades-simplen.csv'
 
 def row(file: str) -> list[str]:
     text: str = Path(file).read_text()
