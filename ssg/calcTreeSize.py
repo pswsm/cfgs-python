@@ -28,30 +28,25 @@ def getSize(fileList: list[Path]) -> tuple[int]:
     return totalByteSize, totalKBSize, totalMBSize, eachFileSize
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser(
-        description='Get size from given directory.')
-    noKBwithMB = parser.add_mutually_exclusive_group()
-    parser.add_argument(
-        'baseTree', help='Base directory to make tree.', type=Path)
-    noKBwithMB.add_argument('-kb', '--kilobytes',
-                            help='Returns size in Kilobytes', action='store_true')
-    noKBwithMB.add_argument('-mb', '--megabytes',
-                            help='Returns size in Megabytes', action='store_true')
-    parser.add_argument(
-        '-g', '--glob', help='Glob to search for files. Must be quoted or double quoted.', type=str)
-    parser.add_argument('-l', '--showfiles',
-                        help='Shows found files.', action='store_true')
-    parsed_args = parser.parse_args()
+# if __name__ == '__main__':
+parser = argparse.ArgumentParser(
+    description='Get size from given directory.')
+noKBwithMB = parser.add_mutually_exclusive_group()
+parser.add_argument(
+    'baseTree', help='Base directory to make tree.', type=Path)
+noKBwithMB.add_argument('-kb', '--kilobytes',
+                        help='Returns size in Kilobytes', action='store_true')
+noKBwithMB.add_argument('-mb', '--megabytes',
+                        help='Returns size in Megabytes', action='store_true')
+parser.add_argument(
+    '-g', '--glob', help='Glob to search for files. Must be quoted or double quoted.', type=str, default='**/*')
+parser.add_argument('-l', '--showfiles',
+                    help='Shows found files.', action='store_true')
+parsed_args = parser.parse_args()
 
-    if parsed_args.glob:
-        files: list[Path] = getTree(parsed_args.baseTree, parsed_args.glob)
-        sizeB, sizeKB, sizeMB, sizeFile = getSize(files)
-    elif not parsed_args.glob:
-        files: list[Path] = getTree(parsed_args.baseTree)
-        sizeB, sizeKB, sizeMB, sizeFile = getSize(files)
-    else:
-        print('You did something really really wrong')
+if __name__ == '__main__':
+    files: list[Path] = getTree(parsed_args.baseTree, parsed_args.glob)
+    sizeB, sizeKB, sizeMB, sizeFile = getSize(files)
 
     if parsed_args.showfiles:
         if parsed_args.kilobytes:
@@ -77,3 +72,5 @@ if __name__ == '__main__':
             print(f'Total 木 size is: {sizeB}B\n')
         else:
             print('Error :/')
+    else:
+        print('You did something really really wrong')
