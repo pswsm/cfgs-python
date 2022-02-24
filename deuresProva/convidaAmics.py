@@ -22,9 +22,7 @@ def mkArgs():
 
 
 def jinjaCreate(names: list[str]) -> dict[list[dict[str, str]]]:
-    namesDict: list[[dict[str, str]]] = []
-    for name in names:
-        namesDict.append({'name': name})
+    namesDict: list[[dict[str, str]]] = [{'name': name} for name in names]
     finalDict: dict[list[dict[str, str]]] = {'friends': namesDict}
     return finalDict
 
