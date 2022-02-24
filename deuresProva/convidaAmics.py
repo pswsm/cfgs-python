@@ -1,3 +1,10 @@
+# @Author: Pau Figueras <pswsm>
+# @Date:   2022-02-17T17:34:08+01:00
+# @Email:  pau@pswsm.cat
+# @Last modified by:   pswsm
+# @Last modified time: 2022-02-24T16:31:04+01:00
+
+
 import argparse
 from pathlib import Path
 from jinja2 import Environment, FileSystemLoader, select_autoescape
