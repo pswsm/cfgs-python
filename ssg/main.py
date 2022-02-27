@@ -44,16 +44,17 @@ def main(input_dir: Path, output_dir: Path) -> None:
     # Copy all resource dirs to output_path
     shutil.copytree(input_dir/"css", output_dir/"css", dirs_exist_ok=True)
     shutil.copytree(input_dir/"img", output_dir/"img", dirs_exist_ok=True)
-    shutil.copytree(input_dir/"js",  output_dir/"js",  dirs_exist_ok=True)
+    #  shutil.copytree(input_dir/"js",  output_dir/"js",  dirs_exist_ok=True)
 
 
 # -----------------------------------------------------------------------------
 if __name__ == "__main__":
 
-    # args: list[str] = sys.argv                       # For command-line
-    args: list[str] = [sys.argv[0], "input", "output"] # For easy testing
+    #  args: list[str] = sys.argv                       # For command-line
+    #  args: list[str] = [sys.argv[0], "input", "output"] # For easy testing
+    args = cmdline.parse_args()
 
-    input_dir, output_dir = cmdline.parse_args(args)
+    input_dir, output_dir = args.inputDir, args.outputDir
 
     main(input_dir, output_dir)
 
