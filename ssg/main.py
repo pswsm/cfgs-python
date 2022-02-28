@@ -34,12 +34,15 @@ def main(input_dir: Path, output_dir: Path) -> None:
     # Fill template with entries (html, metadata)
     template_dir:      Path = input_dir/"html"
     template_filename: str  = "template.html"
-    vars_dict:         dict = {"entry_list": zip(html_str_list, metadata_list)}
-    html_str:          str  = engine.fill_template(template_dir, template_filename, vars_dict)
-
-    # Write index.html to output dir
-    output_dir.mkdir(exist_ok=True)
-    (output_dir/"index.html").write_text(html_str)
+    zipped_entries:    list[tuple[str, str]] = zip(html_str_list, metadata_list)
+    vars_dict:         dict = {"entry_list": zipped_entries}
+    print(vars_dict)
+    for entry in vars_dict:
+        html_str:          str  = engine.fill_template(template_dir, template_filename, entry)
+        # Write index.html to output dir
+        output_dir.mkdir(exist_ok=True)
+        filename: str  = f"{entry}.html"
+        (output_dir/filename).write_text(html_str)
 
     # Copy all resource dirs to output_path
     shutil.copytree(input_dir/"css", output_dir/"css", dirs_exist_ok=True)
