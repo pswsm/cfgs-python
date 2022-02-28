@@ -38,7 +38,7 @@ def main(input_dir: Path, output_dir: Path) -> None:
     vars_dict:         dict = {"entry_list": zipped_entries}
     print(vars_dict)
     for entry in vars_dict:
-        html_str:          str  = engine.fill_template(template_dir, template_filename, entry)
+        html_str:          str  = engine.fill_template(template_dir, template_filename, vars_dict)
         # Write index.html to output dir
         output_dir.mkdir(exist_ok=True)
         filename: str  = f"{entry}.html"
