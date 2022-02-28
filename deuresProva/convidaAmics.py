@@ -40,7 +40,7 @@ def fillTemplate(stringsDict: list[dict[str, str]], templateDir, templateName) -
 if __name__ == '__main__':
     args = mkArgs()
     friends = jinjaCreate(args.friend)
-    print(friends)
+    args.outputDir.mkdir(exist_ok=True)
     for dictionary in friends['friends']:
         # for name in friends:
         text = fillTemplate(dictionary, args.templateDir, args.templateName)
