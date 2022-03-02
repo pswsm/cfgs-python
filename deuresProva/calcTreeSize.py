@@ -12,38 +12,45 @@ def getTree(basedir: Path, globe: str = '**/*') -> list[Path]:
     """Lists all files from all subdirectories from the given base directory
        and returns them as a list of Paths"""
     dir: Path = basedir
-    filesInDir: list[Path] = list(dir.glob(globe))
+    pathsInDir: list[Path] = list(dir.rglob(globe))
+    filesInDir: list[Path] = [file for file in pathsInDir if file.is_file()]
     return filesInDir
 
 
-def getSize(fileList: list[Path]) -> tuple[int]:
+def getSize(fileList: list[Path]) -> tuple[int, float, float, list[tuple[Path, int]]]:
     """From a list of filepaths, gets all sizes and returns the as Byte sizes, KB sizes and MB sizes."""
     files: list[Path] = fileList.copy()
     sizes: list[int] = [file.stat().st_size for file in files]
-    eachFileSize: list[tuple[str, int]] = list(zip(files, sizes))
+    eachFileSize = list(zip(files, sizes))
     totalByteSize: int = sum(sizes)
-    totalKBSize: float = totalByteSize / 1000
-    totalMBSize: float = totalByteSize / 1000000
+    totalKBSize: float = totalByteSize / 1024
+    totalMBSize: float = totalByteSize / 1048576
     return totalByteSize, totalKBSize, totalMBSize, eachFileSize
 
 
 # if __name__ == '__main__':
-parser = argparse.ArgumentParser(
-    description='Get size from given directory.')
-noKBwithMB = parser.add_mutually_exclusive_group()
-parser.add_argument(
-    'baseTree', help='Base directory to make tree.', type=Path)
-noKBwithMB.add_argument('-kb', '--kilobytes',
-                        help='Returns size in Kilobytes', action='store_true')
-noKBwithMB.add_argument('-mb', '--megabytes',
-                        help='Returns size in Megabytes', action='store_true')
-parser.add_argument(
-    '-g', '--glob', help='Glob to search for files. Must be quoted or double quoted.', type=str, default='**/*')
-parser.add_argument('-l', '--showfiles',
-                    help='Shows found files.', action='store_true')
-parsed_args = parser.parse_args()
+def mkArgs():
+    parser = argparse.ArgumentParser(
+        description='Get size from given directory.')
+    noKBwithMB = parser.add_mutually_exclusive_group()
+    noKBwithMB.add_argument('-kb', '--kilobytes',
+                            help='Returns size in Kilobytes', action='store_true')
+    noKBwithMB.add_argument('-mb', '--megabytes',
+                            help='Returns size in Megabytes', action='store_true')
+    parser.add_argument(
+        'baseTree', help='Base directory to make tree.', type=Path)
+    parser.add_argument(
+        '-g', '--glob', help='Glob to search for files. Must be quoted or double quoted.', type=str, default='**/*')
+    parser.add_argument('-l', '--showfiles',
+                        help='Shows found files.', action='store_true')
+    parsed_args = parser.parse_args()
+
+    return parsed_args
 
 if __name__ == '__main__':
+
+    parsed_args = mkArgs()
+
     files: list[Path] = getTree(parsed_args.baseTree, parsed_args.glob)
     sizeB, sizeKB, sizeMB, sizeFile = getSize(files)
 
