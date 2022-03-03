@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="author" value="Pau Figueras">
+  <title>Jinja2 Exàmen Python</title>
+  <link rel="stylesheet" href="css/master.css">
+</head>
+<body>
+  <h1>Imatges Jinja2</h1>
+  <p>made by pswsm</p>
+  {% for entry in entries %}
+    <img src="{{ entry }}">
+  {% endfor %}
+</body>
+</html>
