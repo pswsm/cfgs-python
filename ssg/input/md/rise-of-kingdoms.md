@@ -1,7 +1,7 @@
 ---
 title:  rise of kingdoms
 date:   2021-12-02
-author: Luis, Pau
+author: Luis, Pau, Denys
 ---
 
 ![rise_of_kingdoms](img/RoK.png)

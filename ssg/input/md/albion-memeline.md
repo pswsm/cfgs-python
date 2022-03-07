@@ -1,7 +1,7 @@
 ---
 title:  Albion on-line
 date:   2021-12-01
-author: ['Luis', 'Pau']
+author: 'Luis, Pau, Denys'
 ---
 
 ![Albion](img/albion-onlnine.png)

@@ -7,11 +7,11 @@ SSG v09
 - Also for debugging: import pprint; pprint.pp()
 """
 
-from   pathlib import Path
-from   typing  import Iterator
+from pathlib import Path
+from typing import Iterator
 
 import shutil
-import sys
+# import sys
 
 import cmdline
 import engine
@@ -21,28 +21,39 @@ import engine
 def main(input_dir: Path, output_dir: Path) -> None:
     """Reads a markdown file and writes its html conversion."""
 
+    # Creates output directory, if it doesn't exist
+    output_dir.mkdir(exist_ok=True)
+
     # Get the list of all markdown files
-    markdown_dir:           Path           = input_dir/"md"
+    markdown_dir:           Path = input_dir/"md"
     markdown_filepath_iter: Iterator[Path] = markdown_dir.glob("*.md")
-    markdown_filepath_list: list[Path]     = sorted(markdown_filepath_iter, reverse=True)
+    markdown_filepath_list: list[Path] = sorted(
+        markdown_filepath_iter, reverse=True)
+    markdown_filenames: list[Path] = [
+        filename.stem for filename in markdown_filepath_list if filename.is_file()]
 
     # Read all MarkDown (md) files and convert their contents to html and metadata
-    md_str_list:   list[str]  = [path.read_text() for path in markdown_filepath_list]
-    html_str_list: list[str]  = [engine.convert_md_to_html(md_str) for md_str in md_str_list]
-    metadata_list: list[dict] = [engine.get_md_metadata(md_str)    for md_str in md_str_list]
+    md_str_list:   list[str] = [path.read_text()
+                                for path in markdown_filepath_list]
+    html_str_list: list[str] = [
+        engine.convert_md_to_html(md_str) for md_str in md_str_list]
+    metadata_list: list[dict] = [
+        engine.get_md_metadata(md_str) for md_str in md_str_list]
 
     # Fill template with entries (html, metadata)
     template_dir:      Path = input_dir/"html"
-    template_filename: str  = "template.html"
-    zipped_entries:    list[tuple[str, str]] = zip(html_str_list, metadata_list)
-    vars_dict:         dict = {"entry_list": zipped_entries}
-    print(vars_dict)
-    for entry in vars_dict:
-        html_str:          str  = engine.fill_template(template_dir, template_filename, vars_dict)
-        # Write index.html to output dir
-        output_dir.mkdir(exist_ok=True)
-        filename: str  = f"{entry}.html"
-        (output_dir/filename).write_text(html_str)
+    template_filename: str = "template.html"
+
+    counter: int = 0
+
+    # Loops trought each pair and creates each file.
+    for (html, meta) in zip(html_str_list, metadata_list):
+        vars_dict: dict = {"html_list": html, "meta_list": meta}
+        html_str: str = engine.fill_template(
+            template_dir, template_filename, vars_dict)
+        filename: str = f"{markdown_filenames[counter]}.html"
+        (output_dir / filename).write_text(html_str)
+        counter += 1
 
     # Copy all resource dirs to output_path
     shutil.copytree(input_dir/"css", output_dir/"css", dirs_exist_ok=True)
