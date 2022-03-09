@@ -1,10 +1,12 @@
 #! /usr/bin/env python3
 
 """
-SSG v09.1
+SSG v09.1.1
 - Changed how files are handled
 - Arguments now directly handled by cmdline.py
 - Files keep their original name, since each .md is written in a differetn file
+- Modularized the main function
+- Changed variables name
 """
 
 from pathlib import Path
@@ -43,8 +45,9 @@ def mkMdMetadata(mdFilepaths: list[Path]) -> tuple[list[str], list[dict]]:
 def main(inputDir: Path, outputDir: Path) -> None:
     """Reads a markdown file and writes its html conversion.
        inputDir is the Path where resources (template, css, js, md) are located
-       outputDir is the Path where resources from inputDir will be copied, except markdown files, that will be written in html"""
+       outputDir is the Path where resources will be written"""
 
+    # Creates variables
     filepaths, filenames = readMdFiles(inputDir)
     mkDirs(inputDir, outputDir)
     stringList, metadataList = mkMdMetadata(filepaths)
@@ -53,15 +56,12 @@ def main(inputDir: Path, outputDir: Path) -> None:
     template_dir:      Path = inputDir/"html"
     template_filename: str  = "template.html"
 
-    #  counter: int = 0
-
-    # Loops trought each pair and creates each file.
+    # Loops trought each and creates each file.
     for (html, meta, counter) in zip(stringList, metadataList, range(len(filenames))):
         vars_dict: dict = {"html_list": html, "meta_list": meta}
         html_str: str   = engine.fill_template(template_dir, template_filename, vars_dict)
         filename: str   = f"{filenames[counter]}.html"
         (outputDir / filename).write_text(html_str)
-        #  counter += 1
 
 
 # -----------------------------------------------------------------------------
