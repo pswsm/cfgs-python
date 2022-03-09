@@ -1,25 +1,23 @@
 #! /usr/bin/env python3
 
 """
-SSG v09
-- Some refactorings to make it easier to understand.
-- Easier debugging:   https://github.com/microsoft/debugpy/issues/258
-- Also for debugging: import pprint; pprint.pp()
+SSG v09.1
+- Changed how files are handled
+- Arguments now directly handled by cmdline.py
+- Files keep their original name, since each .md is written in a differetn file
 """
 
 from pathlib import Path
 from typing import Iterator
 
-import shutil
-# import sys
-
-import cmdline
-import engine
+import shutil, cmdline, engine
 
 
 # -----------------------------------------------------------------------------
 def main(input_dir: Path, output_dir: Path) -> None:
-    """Reads a markdown file and writes its html conversion."""
+    """Reads a markdown file and writes its html conversion.
+       input_dir is the Path where resources (template, css, js, md) are located
+       output_dir is the Path where resources from input_dir will be copied, except markdown files, that will be written in html"""
 
     # Creates output directory, if it doesn't exist
     output_dir.mkdir(exist_ok=True)
@@ -29,7 +27,7 @@ def main(input_dir: Path, output_dir: Path) -> None:
     markdown_filepath_iter: Iterator[Path] = markdown_dir.glob("*.md")
     markdown_filepath_list: list[Path] = sorted(
         markdown_filepath_iter, reverse=True)
-    markdown_filenames: list[Path] = [
+    markdown_filenames: list[str] = [
         filename.stem for filename in markdown_filepath_list if filename.is_file()]
 
     # Read all MarkDown (md) files and convert their contents to html and metadata
@@ -58,14 +56,11 @@ def main(input_dir: Path, output_dir: Path) -> None:
     # Copy all resource dirs to output_path
     shutil.copytree(input_dir/"css", output_dir/"css", dirs_exist_ok=True)
     shutil.copytree(input_dir/"img", output_dir/"img", dirs_exist_ok=True)
-    #  shutil.copytree(input_dir/"js",  output_dir/"js",  dirs_exist_ok=True)
 
 
 # -----------------------------------------------------------------------------
 if __name__ == "__main__":
 
-    #  args: list[str] = sys.argv                       # For command-line
-    #  args: list[str] = [sys.argv[0], "input", "output"] # For easy testing
     args = cmdline.parse_args()
 
     input_dir, output_dir = args.inputDir, args.outputDir

@@ -2,17 +2,11 @@
 Commandline module: Parses command line arguments.
 """
 from   pathlib import Path
-import argparse
-import sys
+import argparse, sys
 
 # -----------------------------------------------------------------------------
-#  def parse_args(cmdline: list[str]) -> tuple[Path, Path]:
-    #  """Parses the commandline. Must include executable path in [0], like sys.argv."""
 def parse_args():
-
-    # Split command line
-    #  program_name: str       = Path(cmdline[0]).name
-    #  program_args: list[str] = cmdline[1:]
+    """Generates the arguments using the argparse lib"""
 
     # Description
     description: str = "Reads markdown entries and writes them in an html blog."
