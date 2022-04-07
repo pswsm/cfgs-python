@@ -7,6 +7,13 @@ class Table:
     def __init__(self, filepath: str):
         self.data = self.read_table(filepath)
 
+    def __str__(self) -> str:
+        result: str = ''
+        for row in self.data:
+            row_str: str = ''.join(row)
+            result += f'{row_str}\n'
+        return result
+
     def read_csv(self, csv_file_path: str) -> str:
         '''Input:  The path to a .csv file.
           Output: The contents of the .csv file as a single string.'''
@@ -108,5 +115,7 @@ class Table:
 
 if __name__ == "__main__":
 
-    table:     Table = Table("covid-dades-simple.csv")
+    table: Table = Table("/home/pswsm/github/cfgs-python/dades_covid/2022-01-20-covid-dades-aga/2022-01-20-covid-dades-simple.csv")
+    print(table)
+
 
