@@ -4,8 +4,8 @@ from pathlib import Path
 class Table:
 
     # Constructor
-    def __init__(self, filepath: str):
-        self.data = self.read_table(filepath)
+    def __init__(self, data: list[list[str]]):
+        self.data: list[list[str]] = data
 
     def __str__(self) -> str:
         result: str = ''
@@ -41,7 +41,7 @@ class Table:
 
         return table
 
-
+    
     def read_table(self, csv_file_path: str) -> list[list[str]]:
         '''Input:  Path of a .csv file.
            Output: Table as a list of lists of strings with the csv contents.'''
@@ -71,9 +71,7 @@ class Table:
         column_index: int = header.index(column_name)
 
         # Filter rows
-        filtered_data: list[list[str]] = [row
-                                          for row in data
-                                          if (search_str in row[column_index]) ]
+        filtered_data: list[list[str]] = [row for row in data if (search_str in row[column_index]) ]
 
         # Add header to result
         result: list[list[str]] = [header] + filtered_data
@@ -115,7 +113,10 @@ class Table:
 
 if __name__ == "__main__":
 
-    table: Table = Table("/home/pswsm/github/cfgs-python/dades_covid/2022-01-20-covid-dades-aga/2022-01-20-covid-dades-simple.csv")
+    list1: list[list[str]] = [[str(y) for y in range(6)] for x in range(21)]
+    table: Table = Table(list1)
     print(table)
+    table_from_list: Table = Table.from_csv("/home/pswsm/github/cfgs-python/dades_covid/2022-01-20-covid-dades-aga/2022-01-20-covid-dades-simple.csv")
+    print(table_from_list)
 
 
