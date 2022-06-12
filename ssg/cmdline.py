@@ -1,8 +1,9 @@
 """
 Commandline module: Parses command line arguments.
 """
-from   pathlib import Path
-import argparse, sys
+from pathlib import Path
+import argparse
+import sys
 
 # -----------------------------------------------------------------------------
 def parse_args():

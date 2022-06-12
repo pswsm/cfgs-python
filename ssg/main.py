@@ -1,67 +1,72 @@
 #! /usr/bin/env python3
 
 """
-SSG v09.1.1
-- Changed how files are handled
-- Arguments now directly handled by cmdline.py
-- Files keep their original name, since each .md is written in a differetn file
-- Modularized the main function
-- Changed variables name
+SSG v09.1.2
+- Refactor
 """
 
 from pathlib import Path
 from typing import Iterator
 
-import shutil, cmdline, engine
+import shutil
+import cmdline
+import engine
 
 
 # -----------------------------------------------------------------------------
-def mkDirs(inputDir: Path, outputDir: Path) -> None:
-    """Creates outputDir and copies arbitrary folders inside inputDir to the outputDir"""
+def mk_dirs(input_dir: Path, output_dir: Path) -> None:
+    """Creates output_dir and copies arbitrary folders
+       inside input_dir to the output_dir"""
+    output_dir.mkdir(exist_ok=True)
+    shutil.copytree(input_dir/"css", output_dir/"css", dirs_exist_ok=True)
+    shutil.copytree(input_dir/"img", output_dir/"img", dirs_exist_ok=True)
 
-    outputDir.mkdir(exist_ok=True)
-    shutil.copytree(inputDir/"css", outputDir/"css", dirs_exist_ok=True)
-    shutil.copytree(inputDir/"img", outputDir/"img", dirs_exist_ok=True)
 
-def readMdFiles(inputDir: Path) -> tuple[list[Path], list[str]]:
-    """Returns the filenames and filepaths of markdown files from given inputDir"""
+def read_md_files(input_dir: Path) -> tuple[list[Path], list[str]]:
+    """Returns the filenames and filepaths
+       of markdown files from given input_dir"""
+    md_dir: Path = input_dir/"md"
+    md_filepath_iter: Iterator[Path] = md_dir.glob("*.md")
+    md_filepath_list: list[Path] = sorted(md_filepath_iter, reverse=True)
+    md_filenames: list[str] = [filename.stem for filename in md_filepath_list
+                               if filename.is_file()]
+    return md_filepath_list, md_filenames
 
-    mdDir:           Path          = inputDir/"md"
-    mdFilepathIter: Iterator[Path] = mdDir.glob("*.md")
-    mdFilepathList: list[Path]     = sorted(mdFilepathIter, reverse=True)
-    mdFilenames: list[str]         = [filename.stem for filename in mdFilepathList if filename.is_file()]
 
-    return mdFilepathList, mdFilenames
+def mk_md_metadata(md_filepaths: list[Path]) -> tuple[list[str], list[dict]]:
+    """From a list of markdown filepaths,
+       returns metadata and its contents coneverted to html"""
+    md_str_list: list[str] = [path.read_text() for path in md_filepaths]
+    html_str_list: list[str] = [engine.convert_md_to_html(mdStr)
+                                for mdStr in md_str_list]
+    metadata_list: list[dict] = [engine.get_md_metadata(mdStr)
+                                 for mdStr in md_str_list]
 
-def mkMdMetadata(mdFilepaths: list[Path]) -> tuple[list[str], list[dict]]:
-    """From a list of markdown filepaths, returns metadata and its contents coneverted to html"""
+    return html_str_list, metadata_list
 
-    mdStrList:    list[str]  = [path.read_text() for path in mdFilepaths]
-    htmlStrList:  list[str]  = [engine.convert_md_to_html(mdStr) for mdStr in mdStrList]
-    metadataList: list[dict] = [engine.get_md_metadata(mdStr) for mdStr in mdStrList]
 
-    return htmlStrList, metadataList
-
-def main(inputDir: Path, outputDir: Path) -> None:
+def main(input_dir: Path, outpu_dir: Path) -> None:
     """Reads a markdown file and writes its html conversion.
        inputDir is the Path where resources (template, css, js, md) are located
        outputDir is the Path where resources will be written"""
 
     # Creates variables
-    filepaths, filenames = readMdFiles(inputDir)
-    mkDirs(inputDir, outputDir)
-    stringList, metadataList = mkMdMetadata(filepaths)
+    filepaths, filenames = read_md_files(input_dir)
+    mk_dirs(input_dir, outpu_dir)
+    string_list, metadata_list = mk_md_metadata(filepaths)
 
     # Fill template with entries (html, metadata)
-    template_dir:      Path = inputDir/"html"
-    template_filename: str  = "template.html"
+    template_dir: Path = input_dir/"html"
+    template_filename: str = "template.html"
 
     # Loops trought each and creates each file.
-    for (html, meta, counter) in zip(stringList, metadataList, range(len(filenames))):
+    for (html, meta, counter) in zip(string_list, metadata_list,
+                                     range(len(filenames))):
         vars_dict: dict = {"html_list": html, "meta_list": meta}
-        html_str: str   = engine.fill_template(template_dir, template_filename, vars_dict)
-        filename: str   = f"{filenames[counter]}.html"
-        (outputDir / filename).write_text(html_str)
+        html_str: str = engine.fill_template(template_dir, template_filename,
+                                             vars_dict)
+        filename: str = f"{filenames[counter]}.html"
+        (outpu_dir / filename).write_text(html_str)
 
 
 # -----------------------------------------------------------------------------
